@@ -1,4 +1,4 @@
-package com.hmduc.foody
+package com.hmduc.foody.util
 
 class Constants {
     companion object {

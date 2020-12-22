@@ -1,4 +1,4 @@
-package com.hmduc.foody
+package com.hmduc.foody.data.network
 
 import com.hmduc.foody.models.FoodRecipe
 import retrofit2.Response
