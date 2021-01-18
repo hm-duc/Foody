@@ -14,11 +14,11 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
     private var recipes = emptyList<Result>()
 
     class MyViewHolder(private val binding: RecipesRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(result: Result) {
-            binding.result = result
-            binding.executePendingBindings()
-        }
+            RecyclerView.ViewHolder(binding.root) {
+            fun bind(result: Result) {
+                binding.result = result
+                binding.executePendingBindings()
+            }
 
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
@@ -38,8 +38,8 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentRecepe = recipes[position]
-        holder.bind(currentRecepe)
+        val currentRecepi = recipes[position]
+        holder.bind(currentRecepi)
     }
 
     fun setData(newData: FoodRecipe) {

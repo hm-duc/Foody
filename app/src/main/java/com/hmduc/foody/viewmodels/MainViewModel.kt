@@ -1,4 +1,4 @@
-package com.hmduc.foody
+package com.hmduc.foody.viewmodels
 
 import android.app.Application
 import android.content.Context
@@ -17,27 +17,27 @@ import java.lang.Exception
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
-    application: MyApplication
+    application: Application
 ) :
     AndroidViewModel(application) {
 
-    var recipesReponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
     fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
         getRecipesSafeCall(queries)
     }
 
     private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
-        recipesReponse.value = NetworkResult.Loading()
+        recipesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val reponse = repository.remote.getRecipes(queries)
-                recipesReponse.value = handleRecipesReponse(reponse)
+                recipesResponse.value = handleRecipesReponse(reponse)
             } catch (ex: Exception) {
-                recipesReponse.value = NetworkResult.Error("Recipes is not found")
+                recipesResponse.value = NetworkResult.Error("Recipes is not found")
             }
         } else {
-            recipesReponse.value = NetworkResult.Error("No Internet Connection!!")
+            recipesResponse.value = NetworkResult.Error("No Internet Connection!!")
         }
     }
 
