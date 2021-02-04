@@ -1,4 +1,4 @@
-package com.hmduc.foody
+package com.hmduc.foody.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
