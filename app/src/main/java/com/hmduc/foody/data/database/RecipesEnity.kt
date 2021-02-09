@@ -6,7 +6,7 @@ import com.hmduc.foody.models.FoodRecipe
 import com.hmduc.foody.util.Constants.Companion.RECIPES_TABLE
 
 @Entity(tableName = RECIPES_TABLE)
-class RecipesEnity(foodRecipe: FoodRecipe) {
+class RecipesEnity(var foodRecipe: FoodRecipe) {
     @PrimaryKey(autoGenerate = false)
     var id: Int = 0
 }

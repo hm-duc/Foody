@@ -39,8 +39,21 @@ class RecipesFragment : Fragment() {
         mview = inflater.inflate(R.layout.fragment_recipes, container, false)
 
         setUpRecycleView()
+
+        readDatbase()
         requestApiData()
         return mview
+    }
+
+    private fun readDatbase() {
+        mainViewModel.readRecipes.observe(viewLifecycleOwner,{data ->
+            if (data.isNotEmpty()) {
+                mAdapter.setData(data[0].foodRecipe)
+                hideShimmerEffect()
+            } else {
+                requestApiData()
+            }
+        })
     }
 
     private fun requestApiData() {
