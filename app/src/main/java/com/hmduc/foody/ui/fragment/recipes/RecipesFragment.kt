@@ -17,11 +17,13 @@ import com.hmduc.foody.viewmodels.MainViewModel
 import com.hmduc.foody.R
 import com.hmduc.foody.adapter.RecipesAdapter
 import com.hmduc.foody.databinding.FragmentRecipesBinding
+import com.hmduc.foody.util.NetworkListener
 import com.hmduc.foody.util.NetworkResult
 import com.hmduc.foody.util.observerOnce
 import com.hmduc.foody.viewmodels.RecipesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recipes.view.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,6 +37,8 @@ class RecipesFragment : Fragment() {
     private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipesViewModel: RecipesViewModel
+
+    private lateinit var networkListener: NetworkListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +57,28 @@ class RecipesFragment : Fragment() {
 
         setUpRecycleView()
         readDatbase()
-        requestApiData()
+
+        recipesViewModel.readBackOnline.observe(viewLifecycleOwner, {
+            recipesViewModel.backOnline = it
+        })
+
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvaiability(requireContext())
+                .collect { status ->
+                    Log.d("NetworkListener" , status.toString())
+                    recipesViewModel.networkStatus = true
+                    recipesViewModel.showNetworkStatus()
+                }
+        }
 
         binding.recipesFab.setOnClickListener{
-            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            if (recipesViewModel.networkStatus) {
+                findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+            } else {
+                recipesViewModel.showNetworkStatus()
+            }
+
         }
         return binding.root
     }
