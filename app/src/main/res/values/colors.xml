@@ -29,4 +29,5 @@
     <color name="chipTextColor">@color/darkGray</color>
 
     <color name="actionBarBackgroundColor">@color/colorPrimary</color>
+    <color name="stroke_color">@color/lightMediumGray</color>
 </resources>
