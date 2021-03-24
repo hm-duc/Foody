@@ -11,7 +11,6 @@ import com.hmduc.foody.util.Constants.Companion.API_KEY
 import com.hmduc.foody.util.Constants.Companion.DEFAULT_DIET_TYPE
 import com.hmduc.foody.util.Constants.Companion.DEFAULT_MEAL_TYPE
 import com.hmduc.foody.util.Constants.Companion.DEFAULT_RECIPES_NUMBER
-import com.hmduc.foody.util.Constants.Companion.QUERY_API_KEY
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -47,6 +46,7 @@ class RecipesViewModel @ViewModelInject constructor (application: Application, p
         queries[Constants.QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
          queries[Constants.QUERY_TYPE] = mealType
          queries[Constants.QUERY_DIET] = dietType
+         queries[Constants.QUERY_API_KEY] = API_KEY
          queries[Constants.QUERY_ADD_RECIPE_INFORMATION] = "true"
          queries[Constants.QUERY_FILL_INGREDIENTS] = "true"
         return queries

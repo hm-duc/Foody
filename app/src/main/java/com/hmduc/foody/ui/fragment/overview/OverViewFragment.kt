@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import coil.load
 import com.hmduc.foody.R
 import com.hmduc.foody.models.Result
+import com.hmduc.foody.util.Constants.Companion.RECIPE_RESULT_KEY
 import kotlinx.android.synthetic.main.fragment_over_view.view.*
 import kotlinx.android.synthetic.main.fragment_over_view.view.title_textView
 import kotlinx.android.synthetic.main.recipes_row.view.*
@@ -21,7 +22,7 @@ class OverViewFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_over_view, container, false)
         val args = arguments
-        val myBundle: Result? = args?.getParcelable("recipesBundle",)
+        val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
 
         myBundle?.summary.let {
             var summary = Jsoup.parse(it).text()

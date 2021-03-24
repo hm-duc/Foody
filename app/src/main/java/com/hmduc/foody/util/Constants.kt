@@ -3,7 +3,10 @@ package com.hmduc.foody.util
 class Constants {
     companion object {
         const val BASE_URL = "https://api.spoonacular.com"
-        const val API_KEY = "c318a5f04f5946419de0e1c354a0e72d"
+        const val BASE_IMAGE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
+        const val API_KEY = "c7d8b7fbf5074444a89d32a70913f67b"
+
+        const val RECIPE_RESULT_KEY = "recipesBundle"
 
         // API Query Keys
         const val QUERY_SEARCH = "query"
@@ -22,7 +25,7 @@ class Constants {
         const val DEFAULT_MEAL_TYPE = "main course"
         const val DEFAULT_DIET_TYPE = "gluten free"
         const val DEFAULT_RECIPES_NUMBER = "50"
-        const val PREFERENCE_NAME = "food preferences"
+        const val PREFERENCE_NAME = "foody_preferences"
         const val PREFERENCE_MEAL_TYPE = "mealType"
         const val PREFERENCE_MEAL_TYPE_ID = "mealTypeId"
         const val PREFERENCE_DIET_TYPE = "dietType"

@@ -10,6 +10,7 @@ import androidx.navigation.navArgs
 import com.hmduc.foody.R
 import com.hmduc.foody.adapter.PagerAdapter
 import com.hmduc.foody.ui.fragment.ingredients.IngridientsFragment
+import com.hmduc.foody.ui.fragment.introductions.IntroductionsFragment
 import com.hmduc.foody.ui.fragment.overview.OverViewFragment
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -39,7 +40,7 @@ class DetailActivity : AppCompatActivity() {
         val fragments = ArrayList<Fragment>()
         fragments.add(OverViewFragment())
         fragments.add(IngridientsFragment())
-        fragments.add(OverViewFragment())
+        fragments.add(IntroductionsFragment())
 
         val titles = ArrayList<String>()
         titles.add("OverView")

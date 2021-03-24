@@ -38,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="@id/white_background"
                 app:layout_constraintTop_toTopOf="@id/white_background"
                 app:layout_constraintBottom_toBottomOf="@id/white_background"
-                android:id="@+id/imageView"
+                android:id="@+id/ingredient_imageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 tools:srcCompat="@tools:sample/avatars" />
