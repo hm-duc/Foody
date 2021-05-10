@@ -3,20 +3,34 @@ package com.hmduc.foody.ui
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.util.Log.d
+import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.hmduc.foody.R
 import com.hmduc.foody.adapter.PagerAdapter
+import com.hmduc.foody.data.database.enities.FavoritesEnity
 import com.hmduc.foody.ui.fragment.ingredients.IngridientsFragment
 import com.hmduc.foody.ui.fragment.introductions.IntroductionsFragment
 import com.hmduc.foody.ui.fragment.overview.OverViewFragment
+import com.hmduc.foody.viewmodels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_detail.*
+import java.lang.Exception
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private val args by navArgs<DetailActivityArgs>()
+    private val mainViewModel: MainViewModel by viewModels()
+
+    private var savedFavorite: Boolean = false
+    private var savedIdRecipe = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +46,61 @@ class DetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
+        } else if (item.itemId == R.id.save_to_favorites_menu && !savedFavorite) {
+            saveToFavorites(item)
+        } else if (item.itemId == R.id.save_to_favorites_menu && savedFavorite) {
+            removeFormFavorites(item)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveToFavorites(item: MenuItem) {
+        val favoritesEntity = FavoritesEnity(0, args.result)
+        mainViewModel.insertFavorites(favoritesEntity)
+        changeMenuItemColor(item, R.color.yellow)
+        showSnackbar("Saved.")
+        savedFavorite = true
+    }
+
+    private fun showSnackbar(s: String) {
+        Snackbar.make(detailLayout, s, Snackbar.LENGTH_SHORT).setAction("Okaey"){}.show()
+    }
+
+    private fun changeMenuItemColor(item: MenuItem, color: Int) {
+        item.icon.setTint(ContextCompat.getColor(this, color))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        val menuItem = menu?.findItem(R.id.save_to_favorites_menu)
+        checkSavedRecipes(menuItem!!)
+        return true
+    }
+
+    private fun checkSavedRecipes(menuItem: MenuItem) {
+        mainViewModel.readFavorites.observe(this, { favoritesEnity ->
+            try {
+                for (savedRecipe in favoritesEnity) {
+                    if (savedRecipe.result.recipeId == args.result.recipeId) {
+                        changeMenuItemColor(menuItem, R.color.yellow)
+                        savedIdRecipe = savedRecipe.result.recipeId
+                        savedFavorite = true
+                    } else {
+                        changeMenuItemColor(menuItem, R.color.white)
+                    }
+                }
+            } catch (e: Exception) {
+                d("DetailActivity", e.message.toString())
+            }
+        })
+    }
+
+    private fun removeFormFavorites(item: MenuItem) {
+        val favoritesEntity = FavoritesEnity(savedIdRecipe, args.result)
+        mainViewModel.deleteFavorites(favoritesEntity)
+        changeMenuItemColor(item, R.color.white)
+        showSnackbar("Removed form Favorites.")
+        savedFavorite = false
     }
 
     private fun setUpPagerApdater() {
