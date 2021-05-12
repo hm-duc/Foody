@@ -25,9 +25,9 @@ class RecipesRowBinding {
             }
         }
 
-        @BindingAdapter("setNumberOfLines")
+        @BindingAdapter("setNumberOfLikes")
         @JvmStatic
-        fun setNumberOfLines(textView: TextView, likes: Int) {
+        fun setNumberOfLikes(textView: TextView, likes: Int) {
             textView.text = likes.toString()
         }
 

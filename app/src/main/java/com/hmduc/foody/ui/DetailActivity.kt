@@ -87,6 +87,7 @@ class DetailActivity : AppCompatActivity() {
                         savedFavorite = true
                     } else {
                         changeMenuItemColor(menuItem, R.color.white)
+                        savedFavorite = false
                     }
                 }
             } catch (e: Exception) {
