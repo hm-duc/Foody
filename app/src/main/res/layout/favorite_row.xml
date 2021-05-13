@@ -7,15 +7,20 @@
         <variable
             name="favoriteEntity"
             type="com.hmduc.foody.data.database.enities.FavoritesEnity" />
+        <variable
+            name="mAdapter"
+            type="com.hmduc.foody.adapter.FavoritesAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/FavoriteRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/favorite_row_card_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp"
@@ -28,8 +33,7 @@
             app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                onFavoritesClickListener="@{favoriteEntity.result}"
-                android:id="@+id/favorite_row_card_view"
+                android:id="@+id/favorite_row_constraint"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:background="@color/white">
@@ -67,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/favorite_description_textView"
-                    android:text="@{favoriteEntity.result.summary}"
+                    parseHtml="@{favoriteEntity.result.summary}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"

@@ -30,6 +30,7 @@
 
     <color name="actionBarBackgroundColor">@color/colorPrimary</color>
     <color name="stroke_color">@color/lightMediumGray</color>
+    <color name="cardBackGroundLightColor">#106200EA</color>
 
     <color name="statusColor">@color/colorPrimaryDark</color>
     <color name="contextualStatusBarColor">@color/darker</color>
