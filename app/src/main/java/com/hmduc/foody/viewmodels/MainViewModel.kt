@@ -9,6 +9,7 @@ import androidx.lifecycle.*
 import com.hmduc.foody.data.Repository
 import com.hmduc.foody.data.database.enities.FavoritesEnity
 import com.hmduc.foody.data.database.enities.RecipesEnity
+import com.hmduc.foody.models.FoodJoke
 import com.hmduc.foody.models.FoodRecipe
 import com.hmduc.foody.util.NetworkResult
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +50,7 @@ class MainViewModel @ViewModelInject constructor(
     // Retrofit
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
     var searchRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
 
     fun searchRecipes(searchQuery: Map<String, String>) = viewModelScope.launch {
         searchRecipesSafeCall(searchQuery)
@@ -65,6 +67,29 @@ class MainViewModel @ViewModelInject constructor(
             }
         } else {
             searchRecipesResponse.value = NetworkResult.Error("No Internet Connection!!")
+        }
+    }
+
+    fun getFoodJoke(apiKey: String) = viewModelScope.launch {
+//        getFoodJokeSafeCall(apiKey)
+    }
+
+    private suspend fun getFoodJokeSafeCall(apiKey: String) {
+        foodJokeResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                val reponse = repository.remote.getFoodJoke(apiKey)
+//                foodJokeResponse.value =  (reponse)
+
+                val foodRecipes = foodJokeResponse.value!!.data
+                if (foodRecipes != null) {
+                    offlineCache(foodRecipes)
+                }
+            } catch (ex: Exception) {
+                foodJokeResponse.value = NetworkResult.Error("Recipes is not found")
+            }
+        } else {
+            foodJokeResponse.value = NetworkResult.Error("No Internet Connection!!")
         }
     }
 
