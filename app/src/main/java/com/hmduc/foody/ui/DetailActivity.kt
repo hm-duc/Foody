@@ -1,9 +1,7 @@
 package com.hmduc.foody.ui
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.util.Log.d
 import android.view.Menu
 import android.view.MenuItem
@@ -14,7 +12,7 @@ import androidx.navigation.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.hmduc.foody.R
 import com.hmduc.foody.adapter.PagerAdapter
-import com.hmduc.foody.data.database.enities.FavoritesEnity
+import com.hmduc.foody.data.database.enities.FavoritesEntity
 import com.hmduc.foody.ui.fragment.ingredients.IngridientsFragment
 import com.hmduc.foody.ui.fragment.introductions.IntroductionsFragment
 import com.hmduc.foody.ui.fragment.overview.OverViewFragment
@@ -55,7 +53,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun saveToFavorites(item: MenuItem) {
-        val favoritesEntity = FavoritesEnity(0, args.result)
+        val favoritesEntity = FavoritesEntity(0, args.result)
         mainViewModel.insertFavorites(favoritesEntity)
         changeMenuItemColor(item, R.color.yellow)
         showSnackbar("Saved.")
@@ -97,7 +95,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun removeFormFavorites(item: MenuItem) {
-        val favoritesEntity = FavoritesEnity(savedIdRecipe, args.result)
+        val favoritesEntity = FavoritesEntity(savedIdRecipe, args.result)
         mainViewModel.deleteFavorites(favoritesEntity)
         changeMenuItemColor(item, R.color.white)
         showSnackbar("Removed form Favorites.")

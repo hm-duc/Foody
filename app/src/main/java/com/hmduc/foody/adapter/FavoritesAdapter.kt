@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hmduc.foody.R
-import com.hmduc.foody.data.database.enities.FavoritesEnity
+import com.hmduc.foody.data.database.enities.FavoritesEntity
 import com.hmduc.foody.databinding.FavoriteRowBinding
 import com.hmduc.foody.ui.fragment.favorites.FavoriteFragmentDirections
 import com.hmduc.foody.util.RecipesDiffUtil
@@ -17,16 +17,16 @@ import kotlinx.android.synthetic.main.favorite_row.view.*
 class FavoritesAdapter(val context: FragmentActivity): RecyclerView.Adapter<FavoritesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var multiSelection = false
-    private var selectedRecipes = arrayListOf<FavoritesEnity>()
+    private var selectedRecipes = arrayListOf<FavoritesEntity>()
 
     private lateinit var actionMode: ActionMode
 
-    private var favorites = emptyList<FavoritesEnity>()
+    private var favorites = emptyList<FavoritesEntity>()
     private var myViewHolders = arrayListOf<MyViewHolder>()
 
     class MyViewHolder(private val binding: FavoriteRowBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(favoritesEnity: FavoritesEnity) {
-            binding.favoriteEntity = favoritesEnity
+        fun bind(favoritesEntity: FavoritesEntity) {
+            binding.favoriteEntity = favoritesEntity
             binding.executePendingBindings()
         }
 
@@ -75,14 +75,14 @@ class FavoritesAdapter(val context: FragmentActivity): RecyclerView.Adapter<Favo
         return favorites.size
     }
 
-    fun setData(newFavoriteRecipes: List<FavoritesEnity>) {
+    fun setData(newFavoriteRecipes: List<FavoritesEntity>) {
         val favoritesDiff = RecipesDiffUtil(favorites, newFavoriteRecipes)
         val diffResult = DiffUtil.calculateDiff(favoritesDiff)
         favorites = newFavoriteRecipes
         diffResult.dispatchUpdatesTo(this)
     }
 
-    private fun applySelection(holder: MyViewHolder, currentRecipe: FavoritesEnity) {
+    private fun applySelection(holder: MyViewHolder, currentRecipe: FavoritesEntity) {
         if (selectedRecipes.contains(currentRecipe)) {
             selectedRecipes.remove(currentRecipe)
             applyActionMode()

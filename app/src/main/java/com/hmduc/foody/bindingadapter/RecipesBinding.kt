@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.hmduc.foody.data.database.enities.RecipesEnity
+import com.hmduc.foody.data.database.enities.RecipesEntity
 import com.hmduc.foody.models.FoodRecipe
 import com.hmduc.foody.util.NetworkResult
 
@@ -13,7 +13,7 @@ class RecipesBinding {
 
         @BindingAdapter("readApiResponse", "readDatabase", requireAll = true)
         @JvmStatic
-        fun errorImageViewVisibility(imageView: ImageView, apiReponse: NetworkResult<FoodRecipe>?, database: List<RecipesEnity>?) {
+        fun errorImageViewVisibility(imageView: ImageView, apiReponse: NetworkResult<FoodRecipe>?, database: List<RecipesEntity>?) {
             if(apiReponse is NetworkResult.Error && database.isNullOrEmpty()) {
                 imageView.visibility = View.VISIBLE
             } else {
@@ -23,7 +23,7 @@ class RecipesBinding {
 
         @BindingAdapter("readApiResponse2", "readDatabase2", requireAll = true)
         @JvmStatic
-        fun errorTextViewVisibility(textView: TextView, apiReponse: NetworkResult<FoodRecipe>?, database: List<RecipesEnity>?) {
+        fun errorTextViewVisibility(textView: TextView, apiReponse: NetworkResult<FoodRecipe>?, database: List<RecipesEntity>?) {
             if(apiReponse is NetworkResult.Error && database.isNullOrEmpty()) {
                 textView.visibility = View.VISIBLE
                 textView.text = apiReponse.message.toString()

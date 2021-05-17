@@ -7,8 +7,9 @@ import android.net.NetworkCapabilities
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.hmduc.foody.data.Repository
-import com.hmduc.foody.data.database.enities.FavoritesEnity
-import com.hmduc.foody.data.database.enities.RecipesEnity
+import com.hmduc.foody.data.database.enities.FavoritesEntity
+import com.hmduc.foody.data.database.enities.FoodJokeEntity
+import com.hmduc.foody.data.database.enities.RecipesEntity
 import com.hmduc.foody.models.FoodJoke
 import com.hmduc.foody.models.FoodRecipe
 import com.hmduc.foody.util.NetworkResult
@@ -19,34 +20,45 @@ import java.lang.Exception
 
 class MainViewModel @ViewModelInject constructor(
     private val repository: Repository,
-    application: Application
+    application: Application,
 ) : AndroidViewModel(application) {
 
     // Room database
-    val readRecipes: LiveData<List<RecipesEnity>> = repository.local.readRecipes().asLiveData()
-    val readFavorites: LiveData<List<FavoritesEnity>> = repository.local.readFavorites().asLiveData()
-    private fun insertRecipes(recipesEnity: RecipesEnity) {
+    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readRecipes().asLiveData()
+    val readFavorites: LiveData<List<FavoritesEntity>> =
+        repository.local.readFavorites().asLiveData()
+    val readFoodJoke: LiveData<List<FoodJokeEntity>> = repository.local.readFoodJokes().asLiveData()
+
+    private fun insertRecipes(recipesEntity: RecipesEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertRecipes(recipesEnity)
-        }
-    }
-     fun insertFavorites(favoritesEnity: FavoritesEnity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertFavorites(favoritesEnity)
+            repository.local.insertRecipes(recipesEntity)
         }
     }
 
-     fun deleteFavorites(favoritesEnity: FavoritesEnity) {
+    fun insertFavorites(favoritesEntity: FavoritesEntity) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.deleteFavorites(favoritesEnity)
+            repository.local.insertFavorites(favoritesEntity)
         }
     }
 
-     fun deleteAllFavorites() {
+    fun deleteFavorites(favoritesEntity: FavoritesEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.deleteFavorites(favoritesEntity)
+        }
+    }
+
+    fun deleteAllFavorites() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.local.deleteAllFavorites()
         }
     }
+
+    fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertFoodJoke(foodJokeEntity)
+        }
+    }
+
     // Retrofit
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
     var searchRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
@@ -71,7 +83,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun getFoodJoke(apiKey: String) = viewModelScope.launch {
-//        getFoodJokeSafeCall(apiKey)
+        getFoodJokeSafeCall(apiKey)
     }
 
     private suspend fun getFoodJokeSafeCall(apiKey: String) {
@@ -79,11 +91,11 @@ class MainViewModel @ViewModelInject constructor(
         if (hasInternetConnection()) {
             try {
                 val reponse = repository.remote.getFoodJoke(apiKey)
-//                foodJokeResponse.value =  (reponse)
+                foodJokeResponse.value = handleFoodJokeReponse(reponse)
 
-                val foodRecipes = foodJokeResponse.value!!.data
-                if (foodRecipes != null) {
-                    offlineCache(foodRecipes)
+                val foodJoke = foodJokeResponse.value!!.data
+                if (foodJoke != null) {
+                    offlineCacheFoodJoke(foodJoke)
                 }
             } catch (ex: Exception) {
                 foodJokeResponse.value = NetworkResult.Error("Recipes is not found")
@@ -106,7 +118,7 @@ class MainViewModel @ViewModelInject constructor(
 
                 val foodRecipes = recipesResponse.value!!.data
                 if (foodRecipes != null) {
-                    offlineCache(foodRecipes)
+                    offlineCacheRecipe(foodRecipes)
                 }
             } catch (ex: Exception) {
                 recipesResponse.value = NetworkResult.Error("Recipes is not found")
@@ -116,12 +128,17 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun offlineCache(foodRecipes: FoodRecipe) {
-        val recipesEnity = RecipesEnity(foodRecipes)
+    private fun offlineCacheRecipe(foodRecipes: FoodRecipe) {
+        val recipesEnity = RecipesEntity(foodRecipes)
         insertRecipes(recipesEnity)
     }
 
-    private fun handleRecipesReponse(reponse: Response<FoodRecipe>): NetworkResult<FoodRecipe> {
+    private fun offlineCacheFoodJoke(foodJoke: FoodJoke) {
+        val foodJokeEntity = FoodJokeEntity(foodJoke)
+        insertFoodJoke(foodJokeEntity)
+    }
+
+     private fun handleRecipesReponse(reponse: Response<FoodRecipe>): NetworkResult<FoodRecipe> {
         return when {
             reponse.message().toString().contains("timeout") -> NetworkResult.Error("Timeout")
             reponse.code() == 402 -> NetworkResult.Error("Api Key limmited")
@@ -131,7 +148,16 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun hasInternetConnection() : Boolean {
+    private fun handleFoodJokeReponse(reponse: Response<FoodJoke>): NetworkResult<FoodJoke> {
+        return when {
+            reponse.message().toString().contains("timeout") -> NetworkResult.Error("Timeout")
+            reponse.code() == 402 -> NetworkResult.Error("Api Key limmited")
+            reponse.isSuccessful -> NetworkResult.Success(reponse.body()!!)
+            else -> NetworkResult.Error(reponse.message())
+        }
+    }
+
+    private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager

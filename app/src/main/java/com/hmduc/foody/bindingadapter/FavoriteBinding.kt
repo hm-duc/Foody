@@ -1,9 +1,6 @@
 package com.hmduc.foody.bindingadapter
 
 import android.util.Log.d
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,7 +9,7 @@ import androidx.databinding.BindingAdapter
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.hmduc.foody.adapter.FavoritesAdapter
-import com.hmduc.foody.data.database.enities.FavoritesEnity
+import com.hmduc.foody.data.database.enities.FavoritesEntity
 import com.hmduc.foody.models.Result
 import com.hmduc.foody.ui.fragment.favorites.FavoriteFragmentDirections
 
@@ -30,7 +27,7 @@ class FavoriteBinding {
 
         @BindingAdapter("viewVisibility", "setData", requireAll = false)
         @JvmStatic
-        fun setDataAndViewVisible(view: View, favoritesEntity: List<FavoritesEnity>?, mAdapter: FavoritesAdapter?) {
+        fun setDataAndViewVisible(view: View, favoritesEntity: List<FavoritesEntity>?, mAdapter: FavoritesAdapter?) {
             if (favoritesEntity.isNullOrEmpty()) {
                 d("testtt", favoritesEntity.toString())
                 when (view) {

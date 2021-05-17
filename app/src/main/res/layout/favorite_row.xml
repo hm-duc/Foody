@@ -6,7 +6,7 @@
     <data>
         <variable
             name="favoriteEntity"
-            type="com.hmduc.foody.data.database.enities.FavoritesEnity" />
+            type="com.hmduc.foody.data.database.enities.FavoritesEntity" />
         <variable
             name="mAdapter"
             type="com.hmduc.foody.adapter.FavoritesAdapter" />
