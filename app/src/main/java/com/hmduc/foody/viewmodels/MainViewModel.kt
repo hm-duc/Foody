@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log.d
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.hmduc.foody.data.Repository
@@ -91,6 +92,7 @@ class MainViewModel @ViewModelInject constructor(
         if (hasInternetConnection()) {
             try {
                 val reponse = repository.remote.getFoodJoke(apiKey)
+                d("getFoodJoke", reponse.toString())
                 foodJokeResponse.value = handleFoodJokeReponse(reponse)
 
                 val foodJoke = foodJokeResponse.value!!.data
@@ -114,6 +116,7 @@ class MainViewModel @ViewModelInject constructor(
         if (hasInternetConnection()) {
             try {
                 val reponse = repository.remote.getRecipes(queries)
+                d("getRecipes", reponse.toString())
                 recipesResponse.value = handleRecipesReponse(reponse)
 
                 val foodRecipes = recipesResponse.value!!.data
